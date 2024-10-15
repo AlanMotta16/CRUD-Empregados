@@ -1,4 +1,58 @@
-<h1>Empregados</h1>
+
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">Listar Empregados</h3>
+
+        <!-- Formulário de Adicionar Empregado -->
+        <form action="/empregados" method="POST" class="form-inline mb-3">
+            <div class="form-group mr-2">
+                <input type="text" class="form-control" name="nome" placeholder="Nome" required>
+            </div>
+            <div class="form-group mr-2">
+                <input type="number" class="form-control" name="salario_bruto" placeholder="Salário Bruto" required>
+            </div>
+            <div class="form-group mr-2">
+                <select name="departamento" class="form-control" required>
+                    <option value="1">Administrativo</option>
+                    <option value="2">Designer</option>
+                    <option value="3">Contabil</option>
+                    <option value="4">Fábrica</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Adicionar Empregado</button>
+        </form>
+
+        <!-- Formulário de Pesquisa -->
+        <form action="/pesquisar" method="POST" class="form-inline mb-3">
+            <div class="form-group mr-2">
+                <input type="text" class="form-control" name="nome" placeholder="Pesquisar por Nome">
+            </div>
+            <button type="submit" class="btn btn-primary">Pesquisar</button>
+        </form>
+
+        <!-- Lista de Empregados -->
+        <ul class="list-group">
+            {{#each empregados}}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    ID: {{id}}, Nome: {{nome}}, Salário Bruto: {{salario_bruto}}, Salário Líquido: {{salarioLiquido}},
+                    Departamento: {{departamento}}
+                </div>
+                <div>
+                    <a href="/empregados/edit/{{id}}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="/empregados/delete/{{id}}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+
+        <div class="text-center mt-4">
+            <a href="/salarios" class="btn btn-primary btn-block mt-4">Consultar Maior e Menor Salário</a>
+        </div>
+    </div>
+
+{{!-- <h1>Listar Empregados</h1>
 <form action="/empregados" method="POST">
     <input type="text" name="nome" placeholder="Nome" required>
     <input type="number" name="salario_bruto" placeholder="Salário Bruto" required>
@@ -29,4 +83,4 @@
     {{/each}}
 </ul>
 
-<a href="/salarios">Consultar Maior e Menor Salário</a>
+<a href="/salarios">Consultar Maior e Menor Salário</a> --}}

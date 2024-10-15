@@ -36,23 +36,24 @@ const departamentos = {
 const calcularSalarioLiquido = (salarioBruto) => {
     const inss = salarioBruto * 0.11;
     let irpf = 0;
+    let calcSalario = 0;
+    
 
     if (salarioBruto > 4664.68) {
         irpf += (salarioBruto - 4664.68) * 0.275;
-        salarioBruto = 4664.68;
+        calcSalario = 4664.68;
     }
-    if (salarioBruto > 3751.06) {
-        irpf += (salarioBruto - 3751.06) * 0.225;
-        salarioBruto = 3751.06;
+    else if (salarioBruto > 3751.06) {
+        irpf += (calcSalario - 3751.06) * 0.225;
+        calcSalario = 3751.06;
     }
-    if (salarioBruto > 2826.65) {
-        irpf += (salarioBruto - 2826.65) * 0.15;
-        salarioBruto = 2826.65;
+    else if (salarioBruto > 2826.65) {
+        irpf += (calcSalario - 2826.65) * 0.15;
+        calcSalario = 2826.65;
     }
-    if (salarioBruto > 1903.98) {
-        irpf += (salarioBruto - 1903.98) * 0.075;
+    else if (salarioBruto > 1903.98) {
+        irpf += (calcSalario - 1903.98) * 0.075;
     }
-
     return salarioBruto - inss - irpf;
 };
 
@@ -61,11 +62,21 @@ app.get('/', async (req, res) => {
     const empregados = await Empregado.findAll();
     const empregadosComSalarioLiquido = empregados.map(emp => ({
         ...emp.toJSON(),
-        salarioLiquido: calcularSalarioLiquido(emp.salario_bruto),
-        departamento: departamentos[emp.departamento]
+        salarioLiquido: calcularSalarioLiquido(emp.salario_bruto).toFixed(2),  // Formata com 2 casas decimais
+        departamento: departamentos[emp.departamento],
+        salario_bruto: emp.salario_bruto.toFixed(2)  // Formata o salário bruto também
     }));
     res.render('home', { empregados: empregadosComSalarioLiquido });
 });
+// app.get('/', async (req, res) => {
+//     const empregados = await Empregado.findAll();
+//     const empregadosComSalarioLiquido = empregados.map(emp => ({
+//         ...emp.toJSON(),
+//         salarioLiquido: calcularSalarioLiquido(emp.salario_bruto),
+//         departamento: departamentos[emp.departamento]
+//     }));
+//     res.render('home', { empregados: empregadosComSalarioLiquido });
+// });
 
 // Rota para criar um empregado
 app.post('/empregados', async (req, res) => {
@@ -101,8 +112,23 @@ app.get('/salarios', async (req, res) => {
     }));
     const maiorSalario = salarios.reduce((prev, curr) => (prev.salarioBruto > curr.salarioBruto) ? prev : curr);
     const menorSalario = salarios.reduce((prev, curr) => (prev.salarioBruto < curr.salarioBruto) ? prev : curr);
-    res.json({ maiorSalario, menorSalario });
+
+    // Renderiza a view 'salarios' com os dados de maior e menor salário
+    res.render('salarios', { maiorSalario, menorSalario });
 });
+
+// app.get('/salarios', async (req, res) => {
+//     const empregados = await Empregado.findAll();
+//     const salarios = empregados.map(emp => ({
+//         id: emp.id,
+//         nome: emp.nome,
+//         salarioBruto: emp.salario_bruto,
+//         salarioLiquido: calcularSalarioLiquido(emp.salario_bruto)
+//     }));
+//     const maiorSalario = salarios.reduce((prev, curr) => (prev.salarioBruto > curr.salarioBruto) ? prev : curr);
+//     const menorSalario = salarios.reduce((prev, curr) => (prev.salarioBruto < curr.salarioBruto) ? prev : curr);
+//     res.json({ maiorSalario, menorSalario });
+// });
 
 // Pesquisar por nome
 app.post('/pesquisar', async (req, res) => {
@@ -114,8 +140,50 @@ app.post('/pesquisar', async (req, res) => {
             }
         }
     });
-    res.render('home', { empregados });
+
+    const empregadosComSalarioLiquido = empregados.map(emp => ({
+        ...emp.toJSON(),
+        salarioLiquido: calcularSalarioLiquido(emp.salario_bruto).toFixed(2),  // Formata com 2 casas decimais
+        departamento: departamentos[emp.departamento],
+        salario_bruto: emp.salario_bruto.toFixed(2)  // Formata o salário bruto também
+    }));
+
+    res.render('home', { empregados: empregadosComSalarioLiquido });
 });
+// app.post('/pesquisar', async (req, res) => {
+//     const { nome } = req.body;
+
+//     // Busca empregados pelo nome
+//     const empregados = await Empregado.findAll({
+//         where: {
+//             nome: {
+//                 [Sequelize.Op.like]: `%${nome}%`
+//             }
+//         }
+//     });
+
+//     // Calcula o salário líquido para cada empregado encontrado
+//     const empregadosComSalarioLiquido = empregados.map(emp => ({
+//         ...emp.toJSON(),
+//         salarioLiquido: calcularSalarioLiquido(emp.salario_bruto),
+//         departamento: departamentos[emp.departamento]
+//     }));
+
+//     // Renderiza a view 'home' com os resultados da pesquisa, incluindo o salário líquido
+//     res.render('home', { empregados: empregadosComSalarioLiquido });
+// });
+
+// app.post('/pesquisar', async (req, res) => {
+//     const { nome } = req.body;
+//     const empregados = await Empregado.findAll({
+//         where: {
+//             nome: {
+//                 [Sequelize.Op.like]: `%${nome}%`
+//             }
+//         }
+//     });
+//     res.render('home', { empregados });
+// });
 
 // Conexão e inicialização do servidor
 (async () => {

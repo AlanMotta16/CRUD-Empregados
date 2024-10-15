@@ -1,4 +1,41 @@
-<h1>Editar Empregado</h1>
+<div class="container mt-5">
+    <h3 class="text-center text-white mb-4">Editar Empregado</h3>
+
+    <!-- Formulário de Edição de Empregado -->
+    <form action="/empregados/edit/{{empregado.id}}" method="POST">
+        <div class="form-row">
+            <div class="form-group col-12 col-md-6">
+                <label for="nome" class="text-white">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" value="{{empregado.nome}}" required>
+            </div>
+            <div class="form-group col-12 col-md-6">
+                <label for="salario_bruto" class="text-white">Salário Bruto</label>
+                <input type="number" class="form-control" id="salario_bruto" name="salario_bruto"
+                    value="{{empregado.salario_bruto}}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-12 col-md-6">
+                <label for="departamento" class="text-white">Departamento</label>
+                <select id="departamento" name="departamento" class="form-control" required>
+                    <option value="1" {{#if (eq empregado.departamento 1)}}selected{{/if}}>Administrativo</option>
+                    <option value="2" {{#if (eq empregado.departamento 2)}}selected{{/if}}>Designer</option>
+                    <option value="3" {{#if (eq empregado.departamento 3)}}selected{{/if}}>Contabil</option>
+                    <option value="4" {{#if (eq empregado.departamento 4)}}selected{{/if}}>Fábrica</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary btn-block">Atualizar Empregado</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{{!-- <h3 class="text-center">Editar Empregado</h3>
 <form action="/empregados/edit/{{empregado.id}}" method="POST">
     <input type="text" name="nome" value="{{empregado.nome}}" required>
     <input type="number" name="salario_bruto" value="{{empregado.salario_bruto}}" required>
@@ -9,4 +46,4 @@
         <option value="4" {{#if (eq empregado.departamento 4)}}selected{{/if}}>Fábrica</option>
     </select>
     <button type="submit">Atualizar Empregado</button>
-</form>
+</form> --}}

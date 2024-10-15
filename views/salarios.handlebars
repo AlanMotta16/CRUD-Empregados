@@ -1,0 +1,33 @@
+<div class="container mt-5">
+    <h3 class="text-center text-white mb-4">Consulta de Salários</h3>
+
+    <!-- Maior Salário -->
+    <div class="row mb-4">
+        <div class="col-12 col-md-6">
+            <div class="card bg-dark text-white">
+                <div class="card-header">Maior Salário</div>
+                <div class="card-body">
+                    <p>ID: {{maiorSalario.id}}</p>
+                    <p>Nome: {{maiorSalario.nome}}</p>
+                    <p>Salário Bruto: R$ {{maiorSalario.salarioBruto}}</p>
+                    <p>Salário Líquido: R$ {{maiorSalario.salarioLiquido}}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menor Salário -->
+        <div class="col-12 col-md-6">
+            <div class="card bg-dark text-white">
+                <div class="card-header">Menor Salário</div>
+                <div class="card-body">
+                    <p>ID: {{menorSalario.id}}</p>
+                    <p>Nome: {{menorSalario.nome}}</p>
+                    <p>Salário Bruto: R$ {{menorSalario.salarioBruto}}</p>
+                    <p>Salário Líquido: R$ {{menorSalario.salarioLiquido}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="/" class="btn btn-primary btn-block">Voltar à Lista de Empregados</a>
+</div>
